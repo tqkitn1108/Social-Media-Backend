@@ -18,14 +18,4 @@ public class UserController {
     public ResponseEntity<Optional<User>> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(service.getUserByEmail(email));
     }
-
-    @PostMapping("/save")
-    public ResponseEntity<User> saveUser(@RequestBody RegistrationRequest request) throws MessagingException {
-        return ResponseEntity.ok(service.saveUser(request));
-    }
-
-    @GetMapping("/activate-account")
-    public void confirm(@RequestParam String token) throws MessagingException {
-        service.activateAccount(token);
-    }
 }

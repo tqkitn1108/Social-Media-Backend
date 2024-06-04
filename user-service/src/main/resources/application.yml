@@ -3,6 +3,11 @@ spring:
     name: user-service
   config:
     import: optional:configserver:http://localhost:8888
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/social-media"
   mail:
     host: smtp.gmail.com
     port: 587
