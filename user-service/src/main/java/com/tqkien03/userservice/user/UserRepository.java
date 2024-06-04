@@ -1,6 +1,6 @@
 package com.tqkien03.userservice.user;
 
-import com.tqkien03.userservice.user.User;
+import com.tqkien03.smcommon.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.tqkien03.authservice.security;
+package com.tqkien03.authservice.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;

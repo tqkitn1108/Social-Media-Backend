@@ -1,5 +1,6 @@
 package com.tqkien03.userservice.user;
 
+import com.tqkien03.smcommon.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

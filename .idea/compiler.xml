@@ -15,6 +15,7 @@
         <module name="feed-service" />
         <module name="media-service" />
         <module name="user-service" />
+        <module name="sm-common" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
@@ -29,6 +30,7 @@
       <module name="gateway" options="-parameters" />
       <module name="media-service" options="-parameters" />
       <module name="post-service" options="-parameters" />
+      <module name="sm-common" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

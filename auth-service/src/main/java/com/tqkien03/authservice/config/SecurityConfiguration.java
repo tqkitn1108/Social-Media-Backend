@@ -1,4 +1,4 @@
-package com.tqkien03.authservice.security;
+package com.tqkien03.authservice.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,6 @@
 package com.tqkien03.userservice.user;
 
-import com.tqkien03.userservice.dto.request.RegistrationRequest;
-import jakarta.mail.MessagingException;
+import com.tqkien03.smcommon.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
