@@ -16,6 +16,7 @@
         <module name="media-service" />
         <module name="user-service" />
         <module name="sm-common" />
+        <module name="sm-feign" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
@@ -31,6 +32,7 @@
       <module name="media-service" options="-parameters" />
       <module name="post-service" options="-parameters" />
       <module name="sm-common" options="-parameters" />
+      <module name="sm-feign" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

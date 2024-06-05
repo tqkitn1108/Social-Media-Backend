@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: sm-feign
+    config:
+      users-url: http://localhost:8010/api/v1/users

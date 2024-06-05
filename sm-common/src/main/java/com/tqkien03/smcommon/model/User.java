@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,19 +17,29 @@ import java.util.List;
 public class User {
     @Id
     private String id;
-    private LocalDate dateOfBirth;
     private String avatarUrl;
-    @ManyToMany
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile;
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_friends",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id")
     )
-    private List<User> friends;
-    @ManyToMany
-    private List<User> followers;
-    @ManyToMany(mappedBy = "followers")
-    private List<User> followings;
+    private Set<User> friends;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "friend_pendings",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "pending_id")
+    )
+    private Set<User> friendPendings;
+    @ManyToMany(mappedBy = "friendPendings", fetch = FetchType.LAZY)
+    private Set<User> friendRequests;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<User> followers;
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.LAZY)
+    private Set<User> followings;
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Post> posts;
 }

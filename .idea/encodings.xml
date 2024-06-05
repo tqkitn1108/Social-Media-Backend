@@ -19,6 +19,8 @@
     <file url="file://$PROJECT_DIR$/post-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sm-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sm-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sm-feign/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sm-feign/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user-service/src/main/resources" charset="UTF-8" />
   </component>

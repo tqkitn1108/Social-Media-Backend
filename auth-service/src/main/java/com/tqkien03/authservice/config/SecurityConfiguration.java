@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         http.cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(auth -> auth
                         .jwt(token-> token.jwtAuthenticationConverter(new KeyCloakJwtAuthenticationConverter())));
