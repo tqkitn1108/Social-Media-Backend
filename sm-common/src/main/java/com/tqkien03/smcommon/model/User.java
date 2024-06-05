@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -41,7 +40,11 @@ public class User {
     @ManyToMany(mappedBy = "followers", fetch = FetchType.LAZY)
     private Set<User> followings;
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Post> posts;
+    private Set<Post> posts;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<React> reacts;
     @Embedded
     private Activity activity;
 }

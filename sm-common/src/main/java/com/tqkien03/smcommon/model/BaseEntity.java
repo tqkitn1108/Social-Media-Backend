@@ -30,8 +30,4 @@ public class BaseEntity {
     @LastModifiedDate
     @Column
     private LocalDateTime lastModifiedAt;
-
-    @CreatedBy
-    @Column(nullable = false, updatable = false)
-    private String owner;
 }

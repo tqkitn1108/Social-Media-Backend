@@ -17,7 +17,13 @@ public class MediaMapper {
                 .createdAt(media.getCreatedAt())
                 .lastModifiedAt(media.getLastModifiedAt())
                 .postId(media.getPost().getId())
-                .owner(media.getOwner())
+                .ownerId(getOwnerId(media))
                 .build();
     }
+
+    public String getOwnerId(Media media) {
+        return media.getPost() == null ?
+                media.getComment().getUser().getId() : media.getPost().getOwner().getId();
+    }
+
 }

@@ -2,7 +2,7 @@ package com.tqkien03.userservice.service;
 
 import com.tqkien03.smcommon.dto.FollowDto;
 import com.tqkien03.smcommon.dto.FriendDto;
-import com.tqkien03.smcommon.dto.SimpleUserDto;
+import com.tqkien03.smcommon.dto.UserSummary;
 import com.tqkien03.smcommon.model.User;
 import com.tqkien03.smcommon.model.UserProfile;
 import com.tqkien03.smcommon.dto.ProfileDto;
@@ -54,6 +54,13 @@ public class UserService {
         return profileRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public Object getUserSummary(String targetId, String id) {
+        User me = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
+        return userMapper.toUserSummary(target, me);
+    }
+
     public void updateAvatar(Map<String, String> updates, String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         user.setAvatarUrl(updates.get("avatarUrl"));
@@ -84,7 +91,8 @@ public class UserService {
 
     public boolean follow(String targetId, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
-        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
         target.getFollowers().add(me);
         me.getFollowings().add(target);
@@ -97,9 +105,10 @@ public class UserService {
 
     public boolean unfollow(String targetId, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
-        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
-        if(!me.getFollowings().contains(target)) return false;
+        if (!me.getFollowings().contains(target)) return false;
 
         target.getFollowers().remove(me);
         me.getFollowings().remove(target);
@@ -112,7 +121,8 @@ public class UserService {
 
     public boolean addFriend(String targetId, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
-        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
         target.getFriendPendings().add(me);
         me.getFriendRequests().add(target);
@@ -125,9 +135,10 @@ public class UserService {
 
     public boolean acceptFriendRequest(String targetId, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
-        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
-        if(!me.getFriendPendings().contains(target) || !target.getFriendRequests().contains(me)) return false;
+        if (!me.getFriendPendings().contains(target) || !target.getFriendRequests().contains(me)) return false;
 
         target.getFriends().add(me);
         me.getFriends().add(target);
@@ -140,9 +151,10 @@ public class UserService {
 
     public boolean unfriend(String targetId, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
-        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
-        if(!me.getFriends().contains(target) || !target.getFriends().contains(me)) return false;
+        if (!me.getFriends().contains(target) || !target.getFriends().contains(me)) return false;
 
         target.getFriends().remove(me);
         me.getFriends().remove(target);
@@ -153,11 +165,11 @@ public class UserService {
         return true;
     }
 
-    public List<SimpleUserDto> searchUser(String key, String myId) {
+    public List<UserSummary> searchUser(String key, String myId) {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
         List<UserProfile> userProfiles = profileRepository.findByFullNameContainingIgnoreCase(key);
         List<User> matchedUsers = userProfiles.stream().map(UserProfile::getUser).collect(Collectors.toList());
         matchedUsers.remove(me);
-        return userMapper.usersToSimpleUserDtos(matchedUsers, me);
+        return userMapper.usersToUserSummaries(matchedUsers, me);
     }
 }

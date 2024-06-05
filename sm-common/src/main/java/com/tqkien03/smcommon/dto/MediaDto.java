@@ -21,5 +21,5 @@ public class MediaDto {
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private Integer postId;
-    private String owner;
+    private String ownerId;
 }

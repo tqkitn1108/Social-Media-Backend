@@ -3,7 +3,7 @@ package com.tqkien03.userservice.mapper;
 
 import com.tqkien03.smcommon.dto.FollowDto;
 import com.tqkien03.smcommon.dto.FriendDto;
-import com.tqkien03.smcommon.dto.SimpleUserDto;
+import com.tqkien03.smcommon.dto.UserSummary;
 import com.tqkien03.smcommon.model.User;
 import org.springframework.stereotype.Component;
 
@@ -32,8 +32,8 @@ public class UserMapper {
                 .build();
     }
 
-    public SimpleUserDto toSimpleUserDto(User user, User me) {
-        return SimpleUserDto
+    public UserSummary toUserSummary(User user, User me) {
+        return UserSummary
                 .builder()
                 .id(user.getId())
                 .fullName(getFullName(user))
@@ -61,8 +61,8 @@ public class UserMapper {
                 .toList();
     }
 
-    public List<SimpleUserDto> usersToSimpleUserDtos(List<User> matchedUsers, User me) {
-        return matchedUsers.stream().map(user -> toSimpleUserDto(user, me)).toList();
+    public List<UserSummary> usersToUserSummaries(List<User> matchedUsers, User me) {
+        return matchedUsers.stream().map(user -> toUserSummary(user, me)).toList();
     }
 
     public String getFullName(User user) {

@@ -3,7 +3,6 @@ package com.tqkien03.smcommon.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,5 +17,5 @@ public class PostDto {
     private LocalDateTime lastModifiedAt;
     private int reactsCount;
     private int commentsCount;
-    private SimpleUserDto user;
+    private UserSummary user;
 }

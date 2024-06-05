@@ -1,6 +1,5 @@
 package com.tqkien03.authservice.config;
 
-import com.tqkien03.authservice.dto.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

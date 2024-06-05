@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +29,14 @@ public class UserController {
         return ResponseEntity.ok(service.getProfile(authentication.getName()));
     }
 
+    @GetMapping("/summary/{userId}")
+    public ResponseEntity<?> getUserSummary(@PathVariable String userId,Authentication authentication){
+        return ResponseEntity.ok(service.getUserSummary(userId, authentication.getName()));
+    }
+
     @GetMapping("/search")
-    public ResponseEntity<List<SimpleUserDto>> searchUser(@RequestParam String key, Authentication authentication) {
-        List<SimpleUserDto> simpleUser = service.searchUser(key, authentication.getName());
+    public ResponseEntity<List<UserSummary>> searchUser(@RequestParam String key, Authentication authentication) {
+        List<UserSummary> simpleUser = service.searchUser(key, authentication.getName());
         return !simpleUser.isEmpty() ?
                 ResponseEntity.ok(simpleUser) :
                 ResponseEntity.noContent().build();

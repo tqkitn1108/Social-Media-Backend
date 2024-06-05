@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -26,4 +27,33 @@ public class PostController {
 
         return ResponseEntity.created(uri).body(postDto);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@RequestBody PostRequest postRequest,
+                                        @PathVariable Integer id,
+                                        Authentication authentication){
+        PostDto postDto = postService.updatePost(postRequest, id, authentication.getName());
+        return ResponseEntity.ok(postDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPost(@PathVariable Integer id, Authentication authentication){
+        PostDto postDto = postService.getPost(id, authentication.getName());
+        return ResponseEntity.ok(postDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Integer id, Authentication authentication){
+        postService.deletePost(id, authentication.getName());
+        return ResponseEntity.ok("Delete post successfully");
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyPosts(Authentication authentication) {
+        List<PostDto> postDtos = postService.getPostsByUserId(authentication.getName());
+        if (postDtos.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(postDtos);
+    }
+
 }
