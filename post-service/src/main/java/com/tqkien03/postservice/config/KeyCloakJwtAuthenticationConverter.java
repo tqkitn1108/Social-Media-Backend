@@ -1,6 +1,5 @@
-package com.tqkien03.userservice.config;
+package com.tqkien03.postservice.config;
 
-import com.tqkien03.smcommon.model.UserProfile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -18,11 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KeyCloakJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
-    private static UserProfile profile;
-
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt source) {
-        profile = extractUserProfile(source);
         return new JwtAuthenticationToken(
                 source,
                 Stream.concat(new JwtGrantedAuthoritiesConverter().convert(source).stream(),
@@ -36,17 +32,4 @@ public class KeyCloakJwtAuthenticationConverter implements Converter<Jwt, Abstra
         return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.replace("-", "_")))
                 .collect(Collectors.toSet());
     }
-
-    public UserProfile extractUserProfile(Jwt jwt) {
-        return UserProfile.builder()
-                .userId(jwt.getSubject())
-                .email(jwt.getClaim("email"))
-                .fullName(jwt.getClaim("name"))
-                .build();
-    }
-
-    public static UserProfile getUserProfile(){
-        return profile;
-    }
-
 }

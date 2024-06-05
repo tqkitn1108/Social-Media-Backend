@@ -17,11 +17,11 @@ import java.time.LocalDate;
 public class UserProfile {
     @Id
     private String userId;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String email;
     private LocalDate dateOfBirth;
     private String phoneNumber;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String country;
     @OneToOne

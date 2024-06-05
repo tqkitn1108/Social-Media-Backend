@@ -42,4 +42,6 @@ public class User {
     private Set<User> followings;
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Post> posts;
+    @Embedded
+    private Activity activity;
 }

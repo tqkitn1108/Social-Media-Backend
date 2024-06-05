@@ -1,17 +1,16 @@
 package com.tqkien03.userservice.controller;
 
-import com.tqkien03.smcommon.dto.FollowDto;
-import com.tqkien03.smcommon.dto.FriendDto;
+import com.tqkien03.smcommon.dto.*;
 import com.tqkien03.smcommon.model.User;
 import com.tqkien03.smcommon.model.UserProfile;
-import com.tqkien03.smcommon.dto.ProfileDto;
 import com.tqkien03.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ import java.util.Map;
 public class UserController {
     private final UserService service;
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         User user = service.getCurrentUser(authentication.getName());
         return ResponseEntity.ok(user);
@@ -30,6 +29,14 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserProfile> getProfile(Authentication authentication) {
         return ResponseEntity.ok(service.getProfile(authentication.getName()));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SimpleUserDto>> searchUser(@RequestParam String key, Authentication authentication) {
+        List<SimpleUserDto> simpleUser = service.searchUser(key, authentication.getName());
+        return !simpleUser.isEmpty() ?
+                ResponseEntity.ok(simpleUser) :
+                ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{userId}/followers")
@@ -77,13 +84,6 @@ public class UserController {
         return ResponseEntity.badRequest().body("cannot follow");
     }
 
-    @PostMapping("/unfollow/{id}")
-    public ResponseEntity<?> unfollow(@PathVariable String id, Authentication authentication) {
-        if (service.unfollow(id, authentication.getName()))
-            return ResponseEntity.ok("Unfollow successfully");
-        return ResponseEntity.badRequest().body("cannot unfollow");
-    }
-
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody ProfileDto profileDto, Authentication authentication) {
         service.updateProfile(profileDto, authentication.getName());
@@ -94,6 +94,20 @@ public class UserController {
     public ResponseEntity<?> updateAvatar(@RequestBody Map<String, String> updates, Authentication authentication) {
         service.updateAvatar(updates, authentication.getName());
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/unfollow/{id}")
+    public ResponseEntity<?> unfollow(@PathVariable String id, Authentication authentication) {
+        if (service.unfollow(id, authentication.getName()))
+            return ResponseEntity.ok("Unfollow successfully");
+        return ResponseEntity.badRequest().body("cannot unfollow");
+    }
+
+    @DeleteMapping("/unfriend/{id}")
+    public ResponseEntity<?> unfriend(@PathVariable String id, Authentication authentication) {
+        if (service.unfriend(id, authentication.getName()))
+            return ResponseEntity.ok("Unfriend successfully");
+        return ResponseEntity.badRequest().body("cannot unfriend");
     }
 
 }

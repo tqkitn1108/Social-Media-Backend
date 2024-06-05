@@ -12,12 +12,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Post extends BaseEntity {
+    @Enumerated(EnumType.STRING)
     private PostStatus status;
     private String content;
     @OneToMany(mappedBy = "post")
     private List<Media> medias;
     @OneToMany(mappedBy = "post")
     private List<React> reacts;
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
 }

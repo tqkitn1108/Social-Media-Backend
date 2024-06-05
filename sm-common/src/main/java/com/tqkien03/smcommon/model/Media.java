@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Media extends BaseEntity{
-    private String fileName;
+    private String mediaName;
     private String mediaType;
     private String url;
     private float size;
