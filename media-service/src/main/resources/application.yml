@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: media-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/social-media"
+
+cloudinary:
+  api-key: ${API_KEY}
+  api-secret: ${API_SECRET}
+  cloud-name: ${CLOUD_NAME}
+

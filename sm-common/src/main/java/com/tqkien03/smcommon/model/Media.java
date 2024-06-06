@@ -20,6 +20,8 @@ public class Media extends BaseEntity{
     private String mediaName;
     private String mediaType;
     private String url;
+    private float height;
+    private float width;
     private float size;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -27,4 +29,7 @@ public class Media extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User owner;
 }

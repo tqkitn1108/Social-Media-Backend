@@ -1,4 +1,4 @@
-package com.tqkien03.postservice.mapper;
+package com.tqkien03.mediaservice.media;
 
 import com.tqkien03.smcommon.dto.MediaDto;
 import com.tqkien03.smcommon.model.Media;
@@ -22,5 +22,4 @@ public class MediaMapper {
                 .ownerId(media.getOwner().getId())
                 .build();
     }
-
 }

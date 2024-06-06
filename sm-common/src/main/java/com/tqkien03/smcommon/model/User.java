@@ -45,6 +45,8 @@ public class User {
     private Set<Comment> comments;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<React> reacts;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Media> medias;
     @Embedded
     private Activity activity;
 }

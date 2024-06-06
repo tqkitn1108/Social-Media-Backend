@@ -17,6 +17,8 @@ public class MediaDto {
     private String mediaName;
     private String mediaType;
     private String url;
+    private float height;
+    private float width;
     private float size;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
