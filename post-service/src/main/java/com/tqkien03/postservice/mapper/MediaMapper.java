@@ -1,11 +1,12 @@
 package com.tqkien03.postservice.mapper;
 
-import com.tqkien03.smcommon.dto.MediaDto;
-import com.tqkien03.smcommon.model.Media;
+import com.tqkien03.postservice.dto.MediaDto;
+import com.tqkien03.postservice.model.Media;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MediaMapper {
+
     public MediaDto toMediaDto(Media media) {
         return MediaDto
                 .builder()
@@ -19,7 +20,23 @@ public class MediaMapper {
                 .createdAt(media.getCreatedAt())
                 .lastModifiedAt(media.getLastModifiedAt())
                 .postId(media.getPost().getId())
-                .ownerId(media.getOwner().getId())
+                .ownerId(media.getOwnerId())
+                .build();
+    }
+
+    public Media mediaDtoToMedia(MediaDto mediaDto) {
+        return Media
+                .builder()
+                .id(mediaDto.getId())
+                .mediaName(mediaDto.getMediaName())
+                .mediaType(mediaDto.getMediaType())
+                .url(mediaDto.getUrl())
+                .height(mediaDto.getHeight())
+                .width(mediaDto.getWidth())
+                .size(mediaDto.getSize())
+                .createdAt(mediaDto.getCreatedAt())
+                .lastModifiedAt(mediaDto.getLastModifiedAt())
+                .ownerId(mediaDto.getOwnerId())
                 .build();
     }
 

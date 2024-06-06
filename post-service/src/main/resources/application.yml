@@ -2,9 +2,16 @@ spring:
   application:
     name: post-service
   config:
-    import: optional:configserver:http://localhost:8888
+    import: configserver:http://localhost:8888
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: "http://localhost:9090/realms/social-media"
+#server:
+#  port: 8012
+#
+#application:
+#  config:
+#    user-url: http://localhost:8011/api/v1/users
+#    comment-url: http://localhost:8014/api/v1/comments

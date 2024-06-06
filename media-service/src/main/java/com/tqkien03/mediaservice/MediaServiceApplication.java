@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableFeignClients(basePackages = {"com.tqkien03.smfeign"})
-@EnableJpaRepositories(basePackages = {"com.tqkien03.smcommon"})
-@EntityScan(basePackages = {"com.tqkien03.smcommon"})
 @SpringBootApplication
 public class MediaServiceApplication {
 

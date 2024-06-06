@@ -1,10 +1,10 @@
 package com.tqkien03.userservice.mapper;
 
 
-import com.tqkien03.smcommon.dto.FollowDto;
-import com.tqkien03.smcommon.dto.FriendDto;
-import com.tqkien03.smcommon.dto.UserSummary;
-import com.tqkien03.smcommon.model.User;
+import com.tqkien03.userservice.dto.FollowDto;
+import com.tqkien03.userservice.dto.FriendDto;
+import com.tqkien03.userservice.dto.UserSummary;
+import com.tqkien03.userservice.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -66,7 +66,7 @@ public class UserMapper {
     }
 
     public String getFullName(User user) {
-        return user.getUserProfile().getFullName();
+        return user.getProfile().getFullName();
     }
 
     boolean isFollower(User user, User me) {

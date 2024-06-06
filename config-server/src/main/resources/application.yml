@@ -5,11 +5,11 @@ spring:
     name: config-server
   profiles:
     active: native
-  servlet:
-    multipart:
-      max-file-size: 50MB
   cloud:
     config:
       server:
         native:
           search-locations: classpath:/configurations
+#  servlet:
+#    multipart:
+#      max-file-size: 50MB

@@ -9,8 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableJpaAuditing
 @EnableAsync
-@EnableJpaRepositories(basePackages = {"com.tqkien03.smcommon"})
-@EntityScan(basePackages = {"com.tqkien03.smcommon"})
 @SpringBootApplication
 public class UserServiceApplication {
 

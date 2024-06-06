@@ -1,9 +1,7 @@
 spring:
-  application:
-    name: post-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/users
+    url: jdbc:mysql://localhost:3306/post_db
     username: root
     password: Taquangkien2003
   jpa:
@@ -12,11 +10,11 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 server:
   port: 8012
+
+application:
+  config:
+    user-url: http://localhost:8011/api/v1/users
+    media-url: http://localhost:8013/api/v1/medias
+    comment-url: http://localhost:8014/api/v1/comments

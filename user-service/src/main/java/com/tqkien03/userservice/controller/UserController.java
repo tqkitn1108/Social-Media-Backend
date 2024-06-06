@@ -1,8 +1,10 @@
 package com.tqkien03.userservice.controller;
 
-import com.tqkien03.smcommon.dto.*;
-import com.tqkien03.smcommon.model.User;
-import com.tqkien03.smcommon.model.UserProfile;
+import com.tqkien03.userservice.dto.FollowDto;
+import com.tqkien03.userservice.dto.FriendDto;
+import com.tqkien03.userservice.dto.ProfileDto;
+import com.tqkien03.userservice.dto.UserSummary;
+import com.tqkien03.userservice.model.User;
 import com.tqkien03.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,21 +26,24 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<UserProfile> getProfile(Authentication authentication) {
-        return ResponseEntity.ok(service.getProfile(authentication.getName()));
-    }
-
     @GetMapping("/summary/{userId}")
-    public ResponseEntity<?> getUserSummary(@PathVariable String userId,Authentication authentication){
+    public ResponseEntity<?> getUserSummary(@PathVariable String userId, Authentication authentication) {
         return ResponseEntity.ok(service.getUserSummary(userId, authentication.getName()));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<UserSummary>> searchUser(@RequestParam String key, Authentication authentication) {
-        List<UserSummary> simpleUser = service.searchUser(key, authentication.getName());
-        return !simpleUser.isEmpty() ?
-                ResponseEntity.ok(simpleUser) :
+    public ResponseEntity<List<UserSummary>> searchUserByName(@RequestParam String key, Authentication authentication) {
+        List<UserSummary> userSummary = service.searchUser(key, authentication.getName());
+        return !userSummary.isEmpty() ?
+                ResponseEntity.ok(userSummary) :
+                ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search/{id}")
+    public ResponseEntity<UserSummary> searchUserById(@PathVariable String id, Authentication authentication) {
+        UserSummary userSummary = service.searchUserById(id, authentication.getName());
+        return userSummary != null ?
+                ResponseEntity.ok(userSummary) :
                 ResponseEntity.noContent().build();
     }
 
