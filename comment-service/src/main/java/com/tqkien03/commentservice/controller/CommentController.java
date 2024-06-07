@@ -1,6 +1,7 @@
 package com.tqkien03.commentservice.controller;
 
 import com.tqkien03.commentservice.dto.CommentDto;
+import com.tqkien03.commentservice.dto.CommentRequest;
 import com.tqkien03.commentservice.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class CommentController {
     @SendTo("/topic/comment/{postId}")
     @PostMapping
     public ResponseEntity<?> addComment(@DestinationVariable Integer postId,
-                                        @RequestBody CommentDto commentRequest,
+                                        @RequestBody CommentRequest commentRequest,
                                         Authentication authentication) {
         CommentDto commentDto = commentService.addComment(commentRequest, authentication);
         URI uri = ServletUriComponentsBuilder
@@ -34,29 +35,29 @@ public class CommentController {
         return ResponseEntity.created(uri).body(commentDto);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> updateComment(@RequestBody CommentDto commentDto,
-//                                           @PathVariable Integer id,
-//                                           Authentication authentication){
-//        postService.updatePost(postRequest, id, authentication.getName());
-//        return ResponseEntity.ok("Updated the comment successfully");
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@RequestBody CommentRequest commentRequest,
+                                           @PathVariable Integer id,
+                                           Authentication authentication) {
+        CommentDto commentDto = commentService.updateComment(commentRequest, id, authentication);
+        return ResponseEntity.ok(commentDto);
+    }
 
     @MessageMapping("/comment.get")
     @SendTo("/topic/comment/{postId}")
     @GetMapping("/{id}")
     public ResponseEntity<?> getComment(@PathVariable Integer id, Authentication authentication) {
-        CommentDto commentDto = commentService.getComment(id, authentication.getName());
+        CommentDto commentDto = commentService.getComment(id, authentication);
         return ResponseEntity.ok(commentDto);
     }
 
     @MessageMapping("/comment.get.all")
     @SendTo("/topic/comment/{postId}")
-    @GetMapping("/by-post/{postId}")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<?> getCommentsByPost(@PathVariable Integer postId, Authentication authentication,
-                                               @RequestParam(defaultValue = "0" ) int page,
+                                               @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
-        List<CommentDto> commentDtos = commentService.getCommentsByPost(postId, authentication.getName(), page, size);
+        List<CommentDto> commentDtos = commentService.getCommentsByPostId(postId, authentication, page, size);
         return commentDtos.isEmpty() ?
                 ResponseEntity.noContent().build() :
                 ResponseEntity.ok(commentDtos);

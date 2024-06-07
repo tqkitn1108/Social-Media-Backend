@@ -15,11 +15,13 @@
         <module name="feed-service" />
         <module name="media-service" />
         <module name="user-service" />
-        <module name="sm-common" />
-        <module name="sm-feign" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="sm-common" target="17" />
+      <module name="sm-feign" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

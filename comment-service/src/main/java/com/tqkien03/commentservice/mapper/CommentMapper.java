@@ -44,8 +44,8 @@ public class CommentMapper {
                 .build();
     }
 
-    public List<CommentDto> commentsToCommentDtos(List<Comment> comments) {
-        return comments.stream().map(this::toCommentDto).toList();
+    public List<CommentDto> commentsToCommentDtos(List<Comment> comments, Authentication authentication) {
+        return comments.stream().map(comment -> toCommentDto(comment, authentication)).toList();
     }
 
     public UserSummary getUserSummary(Comment comment, Authentication authentication) {

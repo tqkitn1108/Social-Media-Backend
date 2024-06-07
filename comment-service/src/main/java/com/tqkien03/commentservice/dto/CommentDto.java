@@ -13,7 +13,7 @@ public class CommentDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
-    List<MediaDto> medias;
+    private List<MediaDto> medias;
     private Integer postId;
     private UserSummary user;
 }

@@ -1,17 +1,17 @@
 package com.tqkien03.commentservice.service;
 
+import com.tqkien03.commentservice.client.MediaFeignClient;
 import com.tqkien03.commentservice.client.PostFeignClient;
-import com.tqkien03.commentservice.dto.CommentDto;
-import com.tqkien03.commentservice.dto.PostDto;
-import com.tqkien03.commentservice.dto.UserSummary;
+import com.tqkien03.commentservice.dto.*;
 import com.tqkien03.commentservice.exception.NotAllowedException;
 import com.tqkien03.commentservice.exception.ResourceNotFoundException;
 import com.tqkien03.commentservice.mapper.CommentMapper;
+import com.tqkien03.commentservice.mapper.MediaMapper;
 import com.tqkien03.commentservice.model.Comment;
 import com.tqkien03.commentservice.model.Media;
 import com.tqkien03.commentservice.repository.CommentRepository;
 import com.tqkien03.commentservice.repository.MediaRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -20,46 +20,71 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final MediaRepository mediaRepository;
     private final CommentMapper commentMapper;
+    private final MediaMapper mediaMapper;
     private final PostFeignClient postFeignClient;
+    private final MediaFeignClient mediaFeignClient;
 
-    public CommentDto addComment(CommentDto commentDto, Authentication authentication) {
+    public CommentDto addComment(CommentRequest request, Authentication authentication) {
         String userId = authentication.getName();
-        UserSummary userSummary = commentDto.getUser();
-        if (!userSummary.getId().equals(userId)) {
-            throw new NotAllowedException(userId, commentDto.getContent(), "comment");
+        if (!request.getUserId().equals(userId)) {
+            throw new NotAllowedException(userId, request.getContent(), "comment");
         }
-        int postId = commentDto.getPostId();
+        int postId = request.getPostId();
         PostDto postDto = postFeignClient.getPost(postId, authentication)
                 .orElseThrow(() -> new ResourceNotFoundException("Post" + postId + "not found"));
-        Comment comment = commentMapper.commentDtoToComment(commentDto, authentication);
+        List<MediaDto> mediaDtos = mediaFeignClient.findMediasByListId(request.getMediaIds());
+        List<Media> medias = mediaDtos.stream().map(mediaMapper::mediaDtoToMedia).toList();
+        Comment comment = Comment
+                .builder()
+                .content(request.getContent())
+                .medias(medias)
+                .postId(postId)
+                .userId(userId)
+                .build();
         commentRepository.save(comment);
-        List<Media> medias = mediaRepository.findAllById(mediaIds);
-        for (Media media : medias) {
-            media.setComment(comment);
-        }
-        mediaRepository.saveAll(medias);
-        comment.setMedias(medias);
 
-        commentRepository.save(comment);
-        commentEventSender.sendCommentCreated(comment);
-        return commentMapper.commentToCommentDto(comment, RedisUtil.getInstance().getValue(userId));
+        medias.forEach(media -> media.setComment(comment));
+        mediaRepository.saveAll(medias);
+
+//        commentEventSender.sendCommentCreated(comment);
+        return commentMapper.toCommentDto(comment, authentication);
     }
 
-    public CommentDto getComment(Integer commentId, String userId) {
+    public CommentDto getComment(Integer commentId, Authentication authentication) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(commentId)));
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(comment, authentication);
     }
 
-    public List<CommentDto> getCommentsByPost(Integer postId, String userId, int page, int size) {
+    public CommentDto updateComment(CommentRequest request, Integer commentId, Authentication authentication) {
+        String userId = authentication.getName();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(commentId)));
+        if (!comment.getUserId().equals(userId)) {
+            throw new NotAllowedException(userId, String.valueOf(commentId), "UPDATE");
+        }
+        comment.setContent(request.getContent());
+        List<Media> oldMedias = comment.getMedias();
+        oldMedias.forEach(oldMedia -> oldMedia.setComment(null));
+        mediaRepository.saveAll(oldMedias);
+        List<MediaDto> mediaDtos = mediaFeignClient.findMediasByListId(request.getMediaIds());
+        List<Media> medias = mediaDtos.stream().map(mediaMapper::mediaDtoToMedia).toList();
+        comment.setMedias(medias);
+        medias.forEach(media -> media.setComment(comment));
+        mediaRepository.saveAll(medias);
+        commentRepository.save(comment);
+        return commentMapper.toCommentDto(comment, authentication);
+    }
+
+    public List<CommentDto> getCommentsByPostId(Integer postId, Authentication authentication, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Comment> comments = commentRepository.findAllByPostId(postId, pageable);
-        return commentMapper.commentsToCommentDtos(comments);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAt(postId, pageable);
+        return commentMapper.commentsToCommentDtos(comments, authentication);
     }
 
     public void deleteComment(Integer commentId) {
