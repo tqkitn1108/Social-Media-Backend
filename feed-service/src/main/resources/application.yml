@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: feed-service
+  config:
+    import: configserver:http://localhost:8888
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/social-media"
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: postGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.SpringSerializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: info:com.tqkien03.postservice.messaging.PostEventInfo
+  data:
+    mongodb:
+      database: feed_db
+#      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}
+      uri: mongodb+srv://quangkienta3:Frpsd7Wk6RqtjpsV@cluster0.2wv1jnx.mongodb.net
+
+

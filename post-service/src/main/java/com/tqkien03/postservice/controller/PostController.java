@@ -4,6 +4,7 @@ import com.tqkien03.postservice.dto.PostDto;
 import com.tqkien03.postservice.dto.PostRequest;
 import com.tqkien03.postservice.service.PostService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
 
@@ -55,11 +56,5 @@ public class PostController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(postDtos);
-    }
-
-    @PutMapping("/{postId}/react")
-    public ResponseEntity<?> updateReaction(@PathVariable Integer postId) {
-        postService.updateReaction(postId);
-        return ResponseEntity.ok("Thanks for ");
     }
 }

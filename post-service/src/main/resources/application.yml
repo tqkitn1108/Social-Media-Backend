@@ -8,10 +8,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: "http://localhost:9090/realms/social-media"
-#server:
-#  port: 8012
-#
-#application:
-#  config:
-#    user-url: http://localhost:8011/api/v1/users
-#    comment-url: http://localhost:8014/api/v1/comments
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.SpringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: info:com.tqkien03.postservice.messaging.PostEventInfo

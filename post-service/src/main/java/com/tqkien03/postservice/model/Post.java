@@ -19,6 +19,7 @@ public class Post extends BaseEntity {
     private String content;
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Media> medias;
-    private Integer reactsCount;
+    private int reactsCount;
+    private int commentsCount;
     private String ownerId;
 }

@@ -24,6 +24,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    public User getUserById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
     public User getCurrentUser(String id) {
         if (userRepository.findById(id).isPresent()) {
             return userRepository.findById(id).get();

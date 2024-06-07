@@ -20,6 +20,12 @@ import java.util.Map;
 public class UserController {
     private final UserService service;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        User user = service.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         User user = service.getCurrentUser(authentication.getName());

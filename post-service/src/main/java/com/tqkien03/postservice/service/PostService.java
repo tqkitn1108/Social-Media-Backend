@@ -8,24 +8,27 @@ import com.tqkien03.postservice.exception.NotAllowedException;
 import com.tqkien03.postservice.exception.ResourceNotFoundException;
 import com.tqkien03.postservice.mapper.MediaMapper;
 import com.tqkien03.postservice.mapper.PostMapper;
+import com.tqkien03.postservice.messaging.PostProducer;
 import com.tqkien03.postservice.model.Media;
 import com.tqkien03.postservice.repository.MediaRepository;
 import com.tqkien03.postservice.repository.PostRepository;
 import com.tqkien03.postservice.model.Post;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PostService {
     private final MediaRepository mediaRepository;
     private final MediaFeignClient mediaFeignClient;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final MediaMapper mediaMapper;
+    private final PostProducer postProducer;
 
     public PostDto createPost(PostRequest request, Authentication authentication) {
         String ownerId = authentication.getName();
@@ -43,6 +46,7 @@ public class PostService {
         medias.forEach(media -> media.setPost(post));
         mediaRepository.saveAll(medias);
 
+        postProducer.sendPostCreated(post);
         return postMapper.toPostDto(post, authentication);
     }
 
@@ -63,6 +67,8 @@ public class PostService {
         medias.forEach(media -> media.setPost(post));
         mediaRepository.saveAll(medias);
         postRepository.save(post);
+
+        postProducer.sendPostUpdated(post);
         return postMapper.toPostDto(post, authentication);
     }
 
@@ -86,12 +92,5 @@ public class PostService {
         String userId = authentication.getName();
         List<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId);
         return postMapper.postsToPostDtos(posts, authentication);
-    }
-
-    public void updateReaction(Integer postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(postId)));
-        post.setReactsCount(post.getReactsCount() + 1);
-        postRepository.save(post);
     }
 }

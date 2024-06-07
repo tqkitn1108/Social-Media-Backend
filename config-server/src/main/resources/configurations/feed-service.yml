@@ -1,0 +1,14 @@
+spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/feed_db
+#    username: root
+#    password: Taquangkien2003
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQLDialect
+
+server:
+  port: 8016

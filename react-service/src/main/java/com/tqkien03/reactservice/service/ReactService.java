@@ -6,6 +6,7 @@ import com.tqkien03.reactservice.dto.ReactRequest;
 import com.tqkien03.reactservice.exception.NotAllowedException;
 import com.tqkien03.reactservice.exception.ResourceNotFoundException;
 import com.tqkien03.reactservice.mapper.ReactMapper;
+import com.tqkien03.reactservice.messaging.ReactProducer;
 import com.tqkien03.reactservice.model.React;
 import com.tqkien03.reactservice.model.ReactionType;
 import com.tqkien03.reactservice.repository.ReactRepository;
@@ -24,6 +25,7 @@ public class ReactService {
     private final ReactRepository reactRepository;
     private final ReactMapper reactMapper;
     private final PostFeignClient postFeignClient;
+    private final ReactProducer reactProducer;
 
     public boolean addReact(ReactRequest request, Authentication authentication) {
         try {
@@ -46,8 +48,8 @@ public class ReactService {
                         .userId(userId)
                         .build();
                 reactRepository.save(react);
+                reactProducer.sendReactCreated(react);
             }
-            postFeignClient.updateReaction(postId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

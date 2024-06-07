@@ -11,7 +11,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
 server:
-  port: 8014
+  port: 8015
 
 application:
   config:
