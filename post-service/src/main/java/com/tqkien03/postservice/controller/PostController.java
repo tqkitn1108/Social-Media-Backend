@@ -56,4 +56,10 @@ public class PostController {
         }
         return ResponseEntity.ok(postDtos);
     }
+
+    @PutMapping("/{postId}/react")
+    public ResponseEntity<?> updateReaction(@PathVariable Integer postId) {
+        postService.updateReaction(postId);
+        return ResponseEntity.ok("Thanks for ");
+    }
 }

@@ -87,4 +87,11 @@ public class PostService {
         List<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId);
         return postMapper.postsToPostDtos(posts, authentication);
     }
+
+    public void updateReaction(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(postId)));
+        post.setReactsCount(post.getReactsCount() + 1);
+        postRepository.save(post);
+    }
 }

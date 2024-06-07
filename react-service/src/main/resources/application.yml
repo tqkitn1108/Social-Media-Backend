@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: react-service
+  config:
+    import: configserver:http://localhost:8888
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/social-media"
+#  cloud:
+#    stream:
+#      kafka:
+#        binder:
+#          brokers: localhost:9092
+#          configuration:
+#            key:
+#              serializer: org.apache.kafka.common.serialization.StringSerializer
+#      bindings:
+#        CommentChanged:
+#          destination: comment-changed
+#          contentType: application/json
+
+

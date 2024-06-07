@@ -19,7 +19,6 @@ public class Post extends BaseEntity {
     private String content;
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Media> medias;
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<React> reacts;
+    private Integer reactsCount;
     private String ownerId;
 }

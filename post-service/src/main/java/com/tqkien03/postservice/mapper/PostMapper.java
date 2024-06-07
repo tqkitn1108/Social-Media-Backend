@@ -28,7 +28,7 @@ public class PostMapper {
                 .medias(post.getMedias())
                 .createdAt(post.getCreatedAt())
                 .lastModifiedAt(post.getLastModifiedAt())
-                .reactsCount(post.getReacts().size())
+                .reactsCount(post.getReactsCount())
                 .commentsCount(getCommentsCount(post))
                 .user(getUserSummary(post, authentication))
                 .build();
