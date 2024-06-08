@@ -53,27 +53,51 @@ public class UserController {
                 ResponseEntity.noContent().build();
     }
 
+//    @GetMapping("/{userId}/followers")
+//    public ResponseEntity<List<FollowDto>> getFollowers(
+//            @PathVariable String userId, Authentication authentication,
+//            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//        List<FollowDto> followers = service.getFollowers(userId, authentication.getName(), page, size);
+//        return !followers.isEmpty() ? ResponseEntity.ok(followers) : ResponseEntity.noContent().build();
+//    }
+//
+//    @GetMapping("/{userId}/followings")
+//    public ResponseEntity<List<FollowDto>> getFollowings(
+//            @PathVariable String userId, Authentication authentication,
+//            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//        List<FollowDto> followings = service.getFollowings(userId, authentication.getName(), page, size);
+//        return !followings.isEmpty() ? ResponseEntity.ok(followings) : ResponseEntity.noContent().build();
+//    }
+//
+//    @GetMapping("/{userId}/friends")
+//    public ResponseEntity<List<FriendDto>> getFriends(
+//            @PathVariable String userId, Authentication authentication,
+//            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//        List<FriendDto> friends = service.getFriends(userId, authentication.getName(), page, size);
+//        return !friends.isEmpty() ? ResponseEntity.ok(friends) : ResponseEntity.noContent().build();
+//    }
+
     @GetMapping("/{userId}/followers")
     public ResponseEntity<List<FollowDto>> getFollowers(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        List<FollowDto> followers = service.getFollowers(userId, authentication.getName(), page, size);
+        List<FollowDto> followers = service.getFollowers(userId, page, size);
         return !followers.isEmpty() ? ResponseEntity.ok(followers) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{userId}/followings")
     public ResponseEntity<List<FollowDto>> getFollowings(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        List<FollowDto> followings = service.getFollowings(userId, authentication.getName(), page, size);
+        List<FollowDto> followings = service.getFollowings(userId, page, size);
         return !followings.isEmpty() ? ResponseEntity.ok(followings) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{userId}/friends")
     public ResponseEntity<List<FriendDto>> getFriends(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        List<FriendDto> friends = service.getFriends(userId, authentication.getName(), page, size);
+        List<FriendDto> friends = service.getFriends(userId, page, size);
         return !friends.isEmpty() ? ResponseEntity.ok(friends) : ResponseEntity.noContent().build();
     }
 

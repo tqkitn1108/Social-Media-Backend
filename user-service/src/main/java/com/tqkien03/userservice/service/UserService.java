@@ -62,25 +62,25 @@ public class UserService {
     }
 
 
-    public List<FollowDto> getFollowers(String targetId, String myId, int page, int size) {
-        User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
+    public List<FollowDto> getFollowers(String targetId, int page, int size) {
+        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
         List<String> followerIds = userRepository.findFollowersByUserId(targetId, PageRequest.of(page, size));
         List<User> followers = userRepository.findAllById(followerIds);
-        return userMapper.userListToFollowDtoList(followers, me);
+        return userMapper.userListToFollowDtoList(followers, target);
     }
 
-    public List<FollowDto> getFollowings(String targetId, String myId, int page, int size) {
-        User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
+    public List<FollowDto> getFollowings(String targetId, int page, int size) {
+        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
         List<String> followingIds = userRepository.findFollowingsByUserId(targetId, PageRequest.of(page, size));
         List<User> followings = userRepository.findAllById(followingIds);
-        return userMapper.userListToFollowDtoList(followings, me);
+        return userMapper.userListToFollowDtoList(followings, target);
     }
 
-    public List<FriendDto> getFriends(String targetId, String myId, int page, int size) {
-        User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
+    public List<FriendDto> getFriends(String targetId, int page, int size) {
+        User target = userRepository.findById(targetId).orElseThrow(() -> new ResourceNotFoundException(targetId));
         List<String> friendIds = userRepository.findFriendsByUserId(targetId, PageRequest.of(page, size));
         List<User> friends = userRepository.findAllById(friendIds);
-        return userMapper.userListToFriendDtoList(friends, me);
+        return userMapper.userListToFriendDtoList(friends, target);
     }
 
     public boolean follow(String targetId, String myId) {

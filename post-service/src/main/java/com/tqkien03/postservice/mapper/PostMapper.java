@@ -1,6 +1,5 @@
 package com.tqkien03.postservice.mapper;
 
-import com.tqkien03.postservice.client.CommentFeignClient;
 import com.tqkien03.postservice.client.UserFeignClient;
 import com.tqkien03.postservice.dto.PostDto;
 import com.tqkien03.postservice.dto.UserSummary;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 public class PostMapper {
     private final MediaMapper mediaMapper;
     private final UserFeignClient userFeignClient;
-    private final CommentFeignClient commentFeignClient;
 
     public PostDto toPostDto(Post post, Authentication authentication) {
         return PostDto

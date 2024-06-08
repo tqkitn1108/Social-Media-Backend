@@ -16,14 +16,6 @@ public class MediaService {
         return mediaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Media not found"));
     }
 
-    public List<Media> findMediasByPostId(Integer postId) {
-        return mediaRepository.findByPostId(postId);
-    }
-
-    public List<Media> findMediasByCommentId(Integer commentId) {
-        return mediaRepository.findByPostId(commentId);
-    }
-
     public List<Media> findMediasByListId(List<Integer> mediaIds) {
         return mediaRepository.findAllById(mediaIds);
     }

@@ -16,6 +16,26 @@ spring:
             uri: lb://user-service
             predicates:
               - Path=/api/v1/users/**
+          - id: post-service
+            uri: lb://post-service
+            predicates:
+              - Path=/api/v1/posts/**
+          - id: media-service
+            uri: lb://media-service
+            predicates:
+              - Path=/api/v1/medias/**
+          - id: react-service
+            uri: lb://react-service
+            predicates:
+              - Path=/api/v1/reacts/**
+          - id: comment-service
+            uri: lb://comment-service
+            predicates:
+              - Path=/api/v1/comments/**
+          - id: feed-service
+            uri: lb://feed-service
+            predicates:
+              - Path=/api/v1/feeds/**
 
 eureka:
   client:

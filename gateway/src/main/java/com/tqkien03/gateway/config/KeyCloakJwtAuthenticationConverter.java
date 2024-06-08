@@ -1,4 +1,4 @@
-package com.tqkien03.mediaservice.config;
+package com.tqkien03.gateway.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;

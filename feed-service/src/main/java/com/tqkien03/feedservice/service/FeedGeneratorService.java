@@ -17,14 +17,13 @@ import java.util.List;
 public class FeedGeneratorService {
     private final UserFeignClient userFeignClient;
     private final FeedRepository feedRepository;
-    private final Authentication authentication;
 
     public void addToFeed(PostEventInfo postEventInfo) {
         int postId = postEventInfo.getPostId();
         String userId = postEventInfo.getOwnerId();
         int page = 0, size = 10;
-        List<FollowDto> followers = userFeignClient.getFollowers(userId, authentication, page, size);
-        List<FriendDto> friends = userFeignClient.getFriends(userId, authentication, page, size);
+        List<FollowDto> followers = userFeignClient.getFollowers(userId, page, size);
+        List<FriendDto> friends = userFeignClient.getFriends(userId, page, size);
         if(followers != null && !followers.isEmpty()){
             followers.forEach(follower -> {
                 Feed followerFeed = feedRepository.findByUserId(follower.getUserId());

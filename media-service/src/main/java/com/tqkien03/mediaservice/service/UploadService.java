@@ -6,6 +6,7 @@ import com.tqkien03.mediaservice.dto.FileSupport;
 import com.tqkien03.mediaservice.model.Media;
 import com.tqkien03.mediaservice.repository.MediaRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UploadService {
     private final MediaRepository mediaRepository;
     @Value("${cloudinary.cloud-name}")
@@ -46,6 +47,9 @@ public class UploadService {
                     .mediaType(file.getContentType())
                     .width(width).height(height).size(file.getSize())
                     .ownerId(userId).build();
+            if (fileUp.exists()) {
+                fileUp.delete();
+            }
             return mediaRepository.save(media);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,6 +61,7 @@ public class UploadService {
         File tempFile = new File(fileName);
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             fos.write(multipartFile.getBytes());
+            fos.close();
         }
         return tempFile;
     }

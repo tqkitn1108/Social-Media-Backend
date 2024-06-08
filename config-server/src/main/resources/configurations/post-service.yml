@@ -12,9 +12,3 @@ spring:
 
 server:
   port: 8012
-
-application:
-  config:
-    user-url: http://localhost:8011/api/v1/users
-    media-url: http://localhost:8013/api/v1/medias
-    comment-url: http://localhost:8014/api/v1/comments

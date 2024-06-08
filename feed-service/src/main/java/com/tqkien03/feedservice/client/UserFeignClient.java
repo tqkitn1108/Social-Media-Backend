@@ -19,21 +19,23 @@ public interface UserFeignClient {
 
     @GetMapping("/{id}")
     UserDto getUserById(@PathVariable String id);
+
     @GetMapping("/summary/{userId}")
     Optional<UserSummary> getUserSummary(@PathVariable String userId, Authentication authentication);
+
     @GetMapping("/{userId}/followers")
     List<FollowDto> getFollowers(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
     @GetMapping("/{userId}/followings")
     List<FollowDto> getFollowings(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
     @GetMapping("/{userId}/friends")
     List<FriendDto> getFriends(
-            @PathVariable String userId, Authentication authentication,
+            @PathVariable String userId,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
 }
