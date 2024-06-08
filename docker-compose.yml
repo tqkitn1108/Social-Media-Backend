@@ -39,6 +39,13 @@ services:
       - zookeeper
     networks:
       - social-media
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - social-media
 
 networks:
   social-media:

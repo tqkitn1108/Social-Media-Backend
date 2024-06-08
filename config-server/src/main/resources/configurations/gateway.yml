@@ -44,8 +44,3 @@ eureka:
 server:
   port: 8222
 
-#management:
-#  tracing:
-#    sampling:
-#      probability: 1.0
-
