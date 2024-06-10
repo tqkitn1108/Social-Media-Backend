@@ -49,7 +49,7 @@ public class CommentMapper {
     }
 
     public UserSummary getUserSummary(Comment comment, Authentication authentication) {
-        return userFeignClient.getUserSummary(comment.getUserId(), authentication)
+        return userFeignClient.getUserSummary(comment.getUserId(), authentication.getName())
                 .orElseThrow(() -> new ResourceNotFoundException("User" + authentication.getName() + "not found"));
     }
 }

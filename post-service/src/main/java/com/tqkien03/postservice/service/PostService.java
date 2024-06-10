@@ -1,6 +1,7 @@
 package com.tqkien03.postservice.service;
 
 import com.tqkien03.postservice.client.MediaFeignClient;
+import com.tqkien03.postservice.config.KeyCloakJwtAuthenticationConverter;
 import com.tqkien03.postservice.dto.MediaDto;
 import com.tqkien03.postservice.dto.PostDto;
 import com.tqkien03.postservice.dto.PostRequest;
@@ -47,7 +48,7 @@ public class PostService {
         mediaRepository.saveAll(medias);
 
         postProducer.sendPostCreated(post);
-        return postMapper.toPostDto(post, authentication);
+        return postMapper.toPostDto(post, authentication.getName());
     }
 
     public PostDto updatePost(PostRequest request, Integer postId, Authentication authentication) {
@@ -69,13 +70,13 @@ public class PostService {
         postRepository.save(post);
 
         postProducer.sendPostUpdated(post);
-        return postMapper.toPostDto(post, authentication);
+        return postMapper.toPostDto(post, authentication.getName());
     }
 
     public PostDto getPost(Integer postId, Authentication authentication) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(postId)));
-        return postMapper.toPostDto(post, authentication);
+        return postMapper.toPostDto(post, authentication.getName());
     }
 
     public void deletePost(Integer postId, Authentication authentication) {
@@ -91,6 +92,6 @@ public class PostService {
     public List<PostDto> getPostsByUserId(Authentication authentication) {
         String userId = authentication.getName();
         List<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId);
-        return postMapper.postsToPostDtos(posts, authentication);
+        return postMapper.postsToPostDtos(posts, authentication.getName());
     }
 }

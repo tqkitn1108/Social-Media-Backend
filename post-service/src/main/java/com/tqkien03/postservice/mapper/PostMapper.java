@@ -6,7 +6,6 @@ import com.tqkien03.postservice.dto.UserSummary;
 import com.tqkien03.postservice.exception.ResourceNotFoundException;
 import com.tqkien03.postservice.model.Post;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,10 +14,9 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class PostMapper {
-    private final MediaMapper mediaMapper;
     private final UserFeignClient userFeignClient;
 
-    public PostDto toPostDto(Post post, Authentication authentication) {
+    public PostDto toPostDto(Post post, String myId) {
         return PostDto
                 .builder()
                 .id(post.getId())
@@ -28,16 +26,16 @@ public class PostMapper {
                 .lastModifiedAt(post.getLastModifiedAt())
                 .reactsCount(post.getReactsCount())
                 .commentsCount(getCommentsCount(post))
-                .user(getUserSummary(post, authentication))
+                .user(getUserSummary(post, myId))
                 .build();
     }
 
-    public List<PostDto> postsToPostDtos(List<Post> posts, Authentication authentication) {
-        return posts.stream().map(post -> toPostDto(post, authentication)).collect(Collectors.toList());
+    public List<PostDto> postsToPostDtos(List<Post> posts, String myId) {
+        return posts.stream().map(post -> toPostDto(post, myId)).collect(Collectors.toList());
     }
 
-    public UserSummary getUserSummary(Post post, Authentication authentication) {
-        return userFeignClient.getUserSummary(post.getOwnerId(), authentication)
+    public UserSummary getUserSummary(Post post, String myId) {
+            return userFeignClient.getUserSummary(post.getOwnerId(), myId)
                 .orElseThrow(() -> new ResourceNotFoundException(post.getOwnerId()));
     }
 

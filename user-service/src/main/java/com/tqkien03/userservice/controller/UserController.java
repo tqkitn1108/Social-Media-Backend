@@ -27,14 +27,19 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
-        User user = service.getCurrentUser(authentication.getName());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserSummary> getCurrentUser(Authentication authentication) {
+        UserSummary userSummary = service.getCurrentUser(authentication.getName());
+        return ResponseEntity.ok(userSummary);
     }
 
     @GetMapping("/summary/{userId}")
     public ResponseEntity<?> getUserSummary(@PathVariable String userId, Authentication authentication) {
         return ResponseEntity.ok(service.getUserSummary(userId, authentication.getName()));
+    }
+
+    @GetMapping("/summary-from-me/{userId}")
+    public ResponseEntity<?> getUserSummary(@PathVariable String userId,@RequestParam("from") String myId) {
+        return ResponseEntity.ok(service.getUserSummary(userId, myId));
     }
 
     @GetMapping("/search")

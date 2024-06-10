@@ -39,6 +39,8 @@ public class User {
     private Set<User> followers;
     @ManyToMany(mappedBy = "followers", fetch = FetchType.LAZY)
     private Set<User> followings;
-    @Embedded
-    private Activity activity;
+    private int followersCount;
+    private int followingsCount;
+    private int friendsCount;
+    private int friendsPending;
 }

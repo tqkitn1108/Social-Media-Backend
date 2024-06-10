@@ -23,7 +23,6 @@ public class SecurityConfig {
         http.cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(auth -> auth
                         .jwt(token-> token.jwtAuthenticationConverter(new KeyCloakJwtAuthenticationConverter())));
         return http.build();

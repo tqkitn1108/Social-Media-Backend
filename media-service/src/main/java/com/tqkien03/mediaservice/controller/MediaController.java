@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,21 @@ public class MediaController {
                 ResponseEntity.ok(media) :
                 ResponseEntity.badRequest().body("Can not upload file");
     }
+
+    @PostMapping("/multi-upload")
+    public ResponseEntity<?> multiUpload(@RequestParam("files") List<MultipartFile> files, Authentication authentication) {
+        List<Media> medias = new ArrayList<>();
+        for (MultipartFile file : files) {
+            Media media = uploadService.uploadToCloudinary(file, authentication.getName());
+            if (media != null) {
+                medias.add(media);
+            } else {
+                return ResponseEntity.badRequest().body("Can not upload file");
+            }
+        }
+        return ResponseEntity.ok(medias);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findMediaById(@PathVariable Integer id) {

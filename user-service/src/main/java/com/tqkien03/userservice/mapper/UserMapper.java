@@ -41,8 +41,9 @@ public class UserMapper {
                 .isFollowing(isFollowing(user, me))
                 .isFollower(isFollower(user, me))
                 .isFriend(isFriend(user, me))
-                .followersCount(user.getActivity().getFollowersCount())
-                .friendsCount(user.getActivity().getFriendsCount())
+                .followingsCount(user.getFollowingsCount())
+                .followersCount(user.getFollowersCount())
+                .friendsCount(user.getFriendsCount())
                 .build();
     }
 

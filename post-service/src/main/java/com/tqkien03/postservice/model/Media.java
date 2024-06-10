@@ -1,5 +1,6 @@
 package com.tqkien03.postservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -23,6 +24,7 @@ public class Media extends BaseEntity{
     private float height;
     private float width;
     private float size;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

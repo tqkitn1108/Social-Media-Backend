@@ -13,5 +13,6 @@ public class UserSummary {
     private boolean isFollower;
     private boolean isFriend;
     private Integer followersCount;
+    private Integer followingsCount;
     private Integer friendsCount;
 }

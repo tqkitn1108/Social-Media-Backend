@@ -28,16 +28,17 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User getCurrentUser(String id) {
+    public UserSummary getCurrentUser(String id) {
         if (userRepository.findById(id).isPresent()) {
-            return userRepository.findById(id).get();
+            User user = userRepository.findById(id).get();
+            return userMapper.toUserSummary(user, user);
         }
         User user = User.builder().id(id).build();
         Profile profile = KeyCloakJwtAuthenticationConverter.getUserProfile();
 
         user.setProfile(profile);
         userRepository.save(user);
-        return user;
+        return userMapper.toUserSummary(user, user);
     }
 
     public void updateProfile(ProfileDto profileDto, String id) {
