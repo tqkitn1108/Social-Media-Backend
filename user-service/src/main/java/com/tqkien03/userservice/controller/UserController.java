@@ -133,7 +133,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/avatar")
+    @PatchMapping("/avatar")
     public ResponseEntity<?> updateAvatar(@RequestBody Map<String, String> updates, Authentication authentication) {
         service.updateAvatar(updates, authentication.getName());
         return ResponseEntity.ok().build();

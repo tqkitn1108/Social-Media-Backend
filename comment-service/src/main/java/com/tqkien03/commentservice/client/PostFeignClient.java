@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @FeignClient(name = "post-service", url = "${application.config.post-url}")
 public interface PostFeignClient {
-    @GetMapping("/{id}")
-    Optional<PostDto> getPost(@PathVariable Integer id, Authentication authentication);
+    @GetMapping("/exist/{id}")
+    boolean checkPostExist(@PathVariable Integer id);
 }

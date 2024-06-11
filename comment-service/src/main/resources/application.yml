@@ -14,5 +14,4 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: commentEventInfo:com.tqkien03.reactservice.messaging.CommentEventInfo
-
+        spring.json.type.mapping: commentEventInfo:com.tqkien03.commentservice.messaging.CommentEventInfo

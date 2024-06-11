@@ -19,17 +19,24 @@ public class ReactController {
     @PostMapping
     public ResponseEntity<?> addReact(@RequestBody ReactRequest request, Authentication authentication) {
         return reactService.addReact(request, authentication) ?
-                ResponseEntity.ok("Success") :
-                ResponseEntity.badRequest().body("Failed");
+                ResponseEntity.ok().build() :
+                ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<?> getReactsByPost(@PathVariable Integer postId, Authentication authentication,
-                                            @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size) {
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size) {
         List<ReactDto> reactDtos = reactService.getReacts(postId, authentication, page, size);
         return reactDtos.isEmpty() ?
                 ResponseEntity.noContent().build() :
                 ResponseEntity.ok(reactDtos);
+    }
+
+    @GetMapping("/post/{postId}/by-user/{userId}")
+    public ResponseEntity<?> getByPostAndUser(@PathVariable Integer postId,
+                                              @PathVariable("userId") String userId) {
+        boolean isReacted = reactService.existByPostAndUser(postId, userId);
+        return ResponseEntity.ok().body(isReacted);
     }
 }

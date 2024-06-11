@@ -5,16 +5,12 @@ import com.tqkien03.commentservice.dto.CommentRequest;
 import com.tqkien03.commentservice.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/comments")
@@ -22,11 +18,8 @@ import java.util.Optional;
 public class CommentController {
     private final CommentService commentService;
 
-    @MessageMapping("/comment.create")
-    @SendTo("/topic/comment/{postId}")
     @PostMapping
-    public ResponseEntity<?> addComment(@DestinationVariable Integer postId,
-                                        @RequestBody CommentRequest commentRequest,
+    public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest,
                                         Authentication authentication) {
         CommentDto commentDto = commentService.addComment(commentRequest, authentication);
         URI uri = ServletUriComponentsBuilder
@@ -43,16 +36,12 @@ public class CommentController {
         return ResponseEntity.ok(commentDto);
     }
 
-    @MessageMapping("/comment.get")
-    @SendTo("/topic/comment/{postId}")
     @GetMapping("/{id}")
     public ResponseEntity<?> getComment(@PathVariable Integer id, Authentication authentication) {
         CommentDto commentDto = commentService.getComment(id, authentication);
         return ResponseEntity.ok(commentDto);
     }
 
-    @MessageMapping("/comment.get.all")
-    @SendTo("/topic/comment/{postId}")
     @GetMapping("/post/{postId}")
     public ResponseEntity<?> getCommentsByPost(@PathVariable Integer postId, Authentication authentication,
                                                @RequestParam(defaultValue = "0") int page,
@@ -63,8 +52,6 @@ public class CommentController {
                 ResponseEntity.ok(commentDtos);
     }
 
-    @MessageMapping("/comment.delete")
-    @SendTo("/topic/comment/{postId}")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Integer id) {
         commentService.deleteComment(id);

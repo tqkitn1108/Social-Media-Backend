@@ -30,8 +30,8 @@ public class ReactService {
     public boolean addReact(ReactRequest request, Authentication authentication) {
         try {
             int postId = request.getPostId();
-            postFeignClient.getPost(postId, authentication)
-                    .orElseThrow(() -> new ResourceNotFoundException(postId + "not found"));
+            if (!postFeignClient.checkPostExist(postId))
+                throw new ResourceNotFoundException(postId + "not found");
             String userId = authentication.getName();
             if (!request.getUserId().equals(userId)) {
                 throw new NotAllowedException(userId, String.valueOf(postId), "comment");
@@ -39,6 +39,7 @@ public class ReactService {
 
             Optional<React> reactOptional = reactRepository.findByPostIdAndUserId(postId, userId);
             if (reactOptional.isPresent()) {
+                reactProducer.sendReactDeleted(reactOptional.get());
                 reactRepository.delete(reactOptional.get());
             } else {
                 React react = React
@@ -60,6 +61,10 @@ public class ReactService {
     public List<ReactDto> getReacts(Integer postId, Authentication authentication, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<React> reacts = reactRepository.findByPostId(postId, pageable);
-        return reactMapper.reactsToReactDtos(reacts, authentication);
+        return reactMapper.reactsToReactDtos(reacts, authentication.getName());
+    }
+
+    public boolean existByPostAndUser(Integer postId, String userId) {
+        return reactRepository.existsByPostIdAndUserId(postId, userId);
     }
 }

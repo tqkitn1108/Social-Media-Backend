@@ -43,15 +43,20 @@ public class PostController {
         return ResponseEntity.ok(postDto);
     }
 
+    @GetMapping("/exist/{id}")
+    public ResponseEntity<Boolean> checkPostExist(@PathVariable Integer id) {
+        return ResponseEntity.ok(postService.checkPostExist(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Integer id, Authentication authentication) {
         postService.deletePost(id, authentication);
         return ResponseEntity.ok("Delete post successfully");
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> getMyPosts(Authentication authentication) {
-        List<PostDto> postDtos = postService.getPostsByUserId(authentication);
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<?> getPostsByOwnerId(@PathVariable String id, Authentication authentication) {
+        List<PostDto> postDtos = postService.getPostsByOwnerId(id, authentication);
         if (postDtos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

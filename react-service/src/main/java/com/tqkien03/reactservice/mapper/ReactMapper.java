@@ -7,7 +7,6 @@ import com.tqkien03.reactservice.exception.ResourceNotFoundException;
 import com.tqkien03.reactservice.model.React;
 import com.tqkien03.reactservice.model.ReactionType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,19 +17,19 @@ import java.util.stream.Collectors;
 public class ReactMapper {
     private final UserFeignClient userFeignClient;
 
-    public ReactDto toReactDto(React react, Authentication authentication) {
+    public ReactDto toReactDto(React react, String myId) {
         return ReactDto.builder()
                 .id(react.getId())
                 .type(react.getType().toString())
                 .postId(react.getPostId())
-                .user(getUserSummary(react, authentication))
+                .user(getUserSummary(react, myId))
                 .createdAt(react.getCreatedAt())
                 .build();
     }
 
-    public List<ReactDto> reactsToReactDtos(List<React> reacts, Authentication authentication) {
+    public List<ReactDto> reactsToReactDtos(List<React> reacts, String myId) {
         return reacts.stream()
-                .map(react -> toReactDto(react, authentication))
+                .map(react -> toReactDto(react, myId))
                 .collect(Collectors.toList());
     }
 
@@ -44,8 +43,8 @@ public class ReactMapper {
                 .build();
     }
 
-    UserSummary getUserSummary(React react, Authentication authentication) {
-        return userFeignClient.getUserSummary(react.getUserId(), authentication)
+    UserSummary getUserSummary(React react, String myId) {
+        return userFeignClient.getUserSummary(react.getUserId(), myId)
                 .orElseThrow(() -> new ResourceNotFoundException(react.getUserId()));
     }
 }

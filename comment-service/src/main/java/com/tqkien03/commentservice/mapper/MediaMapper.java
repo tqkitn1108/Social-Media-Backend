@@ -17,7 +17,6 @@ public class MediaMapper {
                 .width(media.getWidth())
                 .size(media.getSize())
                 .createdAt(media.getCreatedAt())
-                .lastModifiedAt(media.getLastModifiedAt())
                 .commentId(media.getComment().getId())
                 .ownerId(media.getOwnerId())
                 .build();
@@ -33,7 +32,6 @@ public class MediaMapper {
                 .width(mediaDto.getWidth())
                 .size(mediaDto.getSize())
                 .createdAt(mediaDto.getCreatedAt())
-                .lastModifiedAt(mediaDto.getLastModifiedAt())
                 .ownerId(mediaDto.getOwnerId())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.tqkien03.postservice.mapper;
 
+import com.tqkien03.postservice.client.ReactFeignClient;
 import com.tqkien03.postservice.client.UserFeignClient;
 import com.tqkien03.postservice.dto.PostDto;
 import com.tqkien03.postservice.dto.UserSummary;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostMapper {
     private final UserFeignClient userFeignClient;
+    private final ReactFeignClient reactFeignClient;
 
     public PostDto toPostDto(Post post, String myId) {
         return PostDto
@@ -25,11 +27,11 @@ public class PostMapper {
                 .createdAt(post.getCreatedAt())
                 .lastModifiedAt(post.getLastModifiedAt())
                 .reactsCount(post.getReactsCount())
-                .commentsCount(getCommentsCount(post))
+                .reacted(checkReact(post.getId(), myId))
+                .commentsCount(post.getCommentsCount())
                 .user(getUserSummary(post, myId))
                 .build();
     }
-
     public List<PostDto> postsToPostDtos(List<Post> posts, String myId) {
         return posts.stream().map(post -> toPostDto(post, myId)).collect(Collectors.toList());
     }
@@ -39,8 +41,7 @@ public class PostMapper {
                 .orElseThrow(() -> new ResourceNotFoundException(post.getOwnerId()));
     }
 
-    private int getCommentsCount(Post post) {
-        return 0;
+    private boolean checkReact(Integer postId, String myId) {
+        return reactFeignClient.getByPostAndUser(postId, myId);
     }
-
 }

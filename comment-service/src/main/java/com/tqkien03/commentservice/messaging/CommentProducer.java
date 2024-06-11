@@ -17,7 +17,12 @@ public class CommentProducer {
 
     public void sendCommentCreated(Comment comment) {
         log.info("sending comment created event for post id {}", comment.getPostId());
-        sendCommentNotification(convertTo(comment));
+        sendCommentNotification(convertTo(comment, CommentEventType.CREATED));
+    }
+
+    public void sendCommentDeleted(Comment comment) {
+        log.info("sending comment deleted event for post id {}", comment.getPostId());
+        sendCommentNotification(convertTo(comment, CommentEventType.DELETED));
     }
 
     private void sendCommentNotification(CommentEventInfo info) {
@@ -31,12 +36,13 @@ public class CommentProducer {
         kafkaTemplate.send(message);
     }
 
-    private CommentEventInfo convertTo(Comment comment) {
+    private CommentEventInfo convertTo(Comment comment, CommentEventType eventType) {
         return CommentEventInfo
                 .builder()
                 .postId(comment.getPostId())
                 .userId(comment.getUserId())
                 .createdAt(comment.getCreatedAt())
+                .eventType(eventType)
                 .build();
     }
 }

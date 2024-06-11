@@ -18,29 +18,23 @@ public class PostConsumer {
     private final PostRepository postRepository;
 
     @KafkaListener(topics = "react-topic")
-    public void consumeReactEvent(ReactEventInfo info,
-                                 @Header(KafkaHeaders.ACKNOWLEDGMENT) Acknowledgment acknowledgment) {
+    public void consumeReactEvent(ReactEventInfo info) {
         Post post = postRepository.findById(info.getPostId())
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(info.getPostId())));
-        post.setReactsCount(post.getReactsCount() + 1);
+        if (info.getEventType() == ReactEventType.DELETED) {
+            post.setReactsCount(post.getReactsCount() - 1);
+        } else post.setReactsCount(post.getReactsCount() + 1);
         postRepository.save(post);
-
-        if (acknowledgment != null) {
-            acknowledgment.acknowledge();
-        }
     }
 
     @KafkaListener(topics = "comment-topic")
-    public void consumeCommentEvent(ReactEventInfo info,
-                                 @Header(KafkaHeaders.ACKNOWLEDGMENT) Acknowledgment acknowledgment) {
+    public void consumeCommentEvent(CommentEventInfo info) {
         Post post = postRepository.findById(info.getPostId())
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(info.getPostId())));
-        post.setCommentsCount(post.getCommentsCount() + 1);
+        if (info.getEventType() == CommentEventType.DELETED) {
+            post.setCommentsCount(post.getCommentsCount() - 1);
+        } else post.setCommentsCount(post.getCommentsCount() + 1);
         postRepository.save(post);
-
-        if (acknowledgment != null) {
-            acknowledgment.acknowledge();
-        }
     }
 }
 

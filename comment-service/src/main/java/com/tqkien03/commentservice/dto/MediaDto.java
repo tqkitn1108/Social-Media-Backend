@@ -16,7 +16,6 @@ public class MediaDto {
     private float width;
     private float size;
     private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
     private Integer commentId;
     private String ownerId;
 }

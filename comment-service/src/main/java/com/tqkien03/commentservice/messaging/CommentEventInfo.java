@@ -11,4 +11,5 @@ public class CommentEventInfo {
     private Integer postId;
     private String userId;
     private LocalDateTime createdAt;
+    private CommentEventType eventType;
 }

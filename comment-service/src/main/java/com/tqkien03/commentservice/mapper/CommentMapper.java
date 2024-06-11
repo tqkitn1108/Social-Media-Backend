@@ -6,7 +6,6 @@ import com.tqkien03.commentservice.dto.UserSummary;
 import com.tqkien03.commentservice.exception.ResourceNotFoundException;
 import com.tqkien03.commentservice.model.Comment;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class CommentMapper {
     private final MediaMapper mediaMapper;
     private final UserFeignClient userFeignClient;
 
-    public Comment commentDtoToComment(CommentDto commentDto, Authentication authentication) {
+    public Comment commentDtoToComment(CommentDto commentDto, String myId) {
         return Comment
                 .builder()
                 .id(commentDto.getId())
@@ -28,10 +27,9 @@ public class CommentMapper {
                 .postId(commentDto.getPostId())
                 .userId(commentDto.getUser().getId())
                 .build();
-
     }
 
-    public CommentDto toCommentDto(Comment comment, Authentication authentication) {
+    public CommentDto toCommentDto(Comment comment, String myId) {
         return CommentDto
                 .builder()
                 .id(comment.getId())
@@ -40,16 +38,16 @@ public class CommentMapper {
                 .createdAt(comment.getCreatedAt())
                 .lastModifiedAt(comment.getLastModifiedAt())
                 .postId(comment.getPostId())
-                .user(getUserSummary(comment, authentication))
+                .user(getUserSummary(comment, myId))
                 .build();
     }
 
-    public List<CommentDto> commentsToCommentDtos(List<Comment> comments, Authentication authentication) {
-        return comments.stream().map(comment -> toCommentDto(comment, authentication)).toList();
+    public List<CommentDto> commentsToCommentDtos(List<Comment> comments, String myId) {
+        return comments.stream().map(comment -> toCommentDto(comment, myId)).toList();
     }
 
-    public UserSummary getUserSummary(Comment comment, Authentication authentication) {
-        return userFeignClient.getUserSummary(comment.getUserId(), authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User" + authentication.getName() + "not found"));
+    public UserSummary getUserSummary(Comment comment, String myId) {
+        return userFeignClient.getUserSummary(comment.getUserId(), myId)
+                .orElseThrow(() -> new ResourceNotFoundException("User" + myId + "not found"));
     }
 }

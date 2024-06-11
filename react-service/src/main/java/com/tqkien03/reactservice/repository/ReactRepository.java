@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ReactRepository extends JpaRepository<React, Integer> {
     Optional<React> findByPostIdAndUserId(Integer postId, String userId);
     List<React> findByPostId(Integer postId, Pageable pageable);
+    boolean existsByPostIdAndUserId(Integer postId, String userId);
 }

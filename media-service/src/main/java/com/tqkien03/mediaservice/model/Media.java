@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Media{
+public class Media {
     @Id
     @GeneratedValue
     private Integer id;
@@ -30,9 +30,4 @@ public class Media{
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column
-    private LocalDateTime lastModifiedAt;
-
 }

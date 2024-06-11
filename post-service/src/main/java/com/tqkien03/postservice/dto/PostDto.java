@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 public class PostDto {
     private Integer id;
-    private String ownerId;
     private String content;
+    private boolean reacted;
     private List<Media> medias;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;

@@ -48,15 +48,15 @@ public class PostService {
         mediaRepository.saveAll(medias);
 
         postProducer.sendPostCreated(post);
-        return postMapper.toPostDto(post, authentication.getName());
+        return postMapper.toPostDto(post, ownerId);
     }
 
     public PostDto updatePost(PostRequest request, Integer postId, Authentication authentication) {
-        String userId = authentication.getName();
+        String ownerId = authentication.getName();
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(postId)));
-        if (!post.getOwnerId().equals(userId)) {
-            throw new NotAllowedException(userId, String.valueOf(postId), "UPDATE");
+        if (!post.getOwnerId().equals(ownerId)) {
+            throw new NotAllowedException(ownerId, String.valueOf(postId), "UPDATE");
         }
         post.setContent(request.getContent());
         List<Media> oldMedias = post.getMedias();
@@ -70,7 +70,7 @@ public class PostService {
         postRepository.save(post);
 
         postProducer.sendPostUpdated(post);
-        return postMapper.toPostDto(post, authentication.getName());
+        return postMapper.toPostDto(post, ownerId);
     }
 
     public PostDto getPost(Integer postId, Authentication authentication) {
@@ -89,9 +89,13 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<PostDto> getPostsByUserId(Authentication authentication) {
+    public List<PostDto> getPostsByOwnerId(String ownerId, Authentication authentication) {
         String userId = authentication.getName();
-        List<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId);
-        return postMapper.postsToPostDtos(posts, authentication.getName());
+        List<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(ownerId);
+        return postMapper.postsToPostDtos(posts, userId);
+    }
+
+    public boolean checkPostExist(Integer id) {
+        return postRepository.existsById(id);
     }
 }

@@ -20,6 +20,11 @@ public class ReactProducer {
         sendReactNotification(convertTo(react, ReactEventType.CREATED));
     }
 
+    public void sendReactDeleted(React react) {
+        log.info("sending react deleted event for post id {}", react.getPostId());
+        sendReactNotification(convertTo(react, ReactEventType.DELETED));
+    }
+
     private void sendReactNotification(ReactEventInfo info) {
 
         Message<ReactEventInfo> message = MessageBuilder
