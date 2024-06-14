@@ -21,7 +21,7 @@ public class FeedService {
     public List<PostDto> getUserFeed(Authentication authentication, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Feed feed = feedRepository.findByUserId(authentication.getName());
-        return feed.getPostIds().stream()
-                .map(postId -> postFeignClient.getPost(postId, authentication)).toList();
+        return feed.getPosts().stream()
+                .map(post -> postFeignClient.getPost(post.getId(), authentication.getName())).toList();
     }
 }

@@ -86,6 +86,7 @@ public class PostService {
         if (!post.getOwnerId().equals(userId)) {
             throw new NotAllowedException(userId, String.valueOf(postId), "DELETE");
         }
+        postProducer.sendPostDeleted(post);
         postRepository.delete(post);
     }
 
@@ -97,5 +98,11 @@ public class PostService {
 
     public boolean checkPostExist(Integer id) {
         return postRepository.existsById(id);
+    }
+
+    public PostDto getPostById(Integer id, String myId) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
+        return postMapper.toPostDto(post, myId);
     }
 }

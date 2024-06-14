@@ -1,19 +1,14 @@
 spring:
-  data:
-    mongodb:
-      database: feed_db
-      #      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}
-      uri: mongodb+srv://quangkienta3:Frpsd7Wk6RqtjpsV@cluster0.2wv1jnx.mongodb.net
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      group-id: postGroup
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: '*'
-        spring.json.type.mapping: postEventInfo:com.tqkien03.feedservice.messaging.PostEventInfo
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/feed_db
+    username: root
+    password: Taquangkien2003
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 server:
   port: 8016

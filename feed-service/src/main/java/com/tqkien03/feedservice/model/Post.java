@@ -5,17 +5,15 @@ import lombok.*;
 
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
-public class Feed {
+public class Post {
     @Id
-    @GeneratedValue
     private Integer id;
-    private String userId;
-    @ManyToMany(mappedBy = "feeds")
-    private Set<Post> posts;
+    @ManyToMany
+    private Set<Feed> feeds;
 }

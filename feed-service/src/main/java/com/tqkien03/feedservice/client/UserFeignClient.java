@@ -19,9 +19,8 @@ public interface UserFeignClient {
 
     @GetMapping("/{id}")
     UserDto getUserById(@PathVariable String id);
-
-    @GetMapping("/summary/{userId}")
-    Optional<UserSummary> getUserSummary(@PathVariable String userId, Authentication authentication);
+    @GetMapping("/summary-from-me/{userId}")
+    Optional<UserSummary> getUserSummary(@PathVariable String userId, @RequestParam("from") String myId);
 
     @GetMapping("/{userId}/followers")
     List<FollowDto> getFollowers(

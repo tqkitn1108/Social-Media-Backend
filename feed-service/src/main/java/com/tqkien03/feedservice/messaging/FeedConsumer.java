@@ -4,9 +4,6 @@ import com.tqkien03.feedservice.service.FeedGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.Acknowledgment;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,23 +13,12 @@ public class FeedConsumer {
     private final FeedGeneratorService feedGeneratorService;
 
     @KafkaListener(topics = "post-topic")
-    public void consumePostEvent(PostEventInfo info,
-                                 @Header(KafkaHeaders.ACKNOWLEDGMENT) Acknowledgment acknowledgment) {
-
+    public void consumePostEvent(PostEventInfo info) {
         PostEventType eventType = info.getEventType();
 
-        log.info("received info to process post {} for user {} eventType {}",
-                info.getPostId(),
-                info.getOwnerId(),
-                eventType.name());
-
         switch (eventType) {
-            case CREATED -> feedGeneratorService.addToFeed(info);
+            case CREATED, UPDATED -> feedGeneratorService.addToFeed(info);
             case DELETED -> feedGeneratorService.deleteFromFeed(info);
-        }
-
-        if (acknowledgment != null) {
-            acknowledgment.acknowledge();
         }
     }
 }

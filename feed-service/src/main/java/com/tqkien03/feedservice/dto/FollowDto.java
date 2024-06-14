@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class FollowDto {
-    private String userId;
+    private String id;
     private String fullName;
     private String avatarUrl;
     private boolean isFollowing;

@@ -43,6 +43,12 @@ public class PostController {
         return ResponseEntity.ok(postDto);
     }
 
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable Integer id, @RequestParam String myId) {
+        PostDto postDto = postService.getPostById(id, myId);
+        return ResponseEntity.ok(postDto);
+    }
+
     @GetMapping("/exist/{id}")
     public ResponseEntity<Boolean> checkPostExist(@PathVariable Integer id) {
         return ResponseEntity.ok(postService.checkPostExist(id));

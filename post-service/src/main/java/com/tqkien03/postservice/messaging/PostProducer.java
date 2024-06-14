@@ -35,6 +35,7 @@ public class PostProducer {
         Message<PostEventInfo> message = MessageBuilder
                 .withPayload(info)
                 .setHeader(KafkaHeaders.TOPIC, "post-topic")
+                .setHeader(KafkaHeaders.KEY, String.valueOf(info.getOwnerId()))
                 .build();
 
         kafkaTemplate.send(message);
@@ -52,8 +53,6 @@ public class PostProducer {
                 .eventType(eventType)
                 .postId(post.getId())
                 .ownerId(post.getOwnerId())
-                .createdAt(post.getCreatedAt())
-                .lastModifiedAt(post.getLastModifiedAt())
                 .build();
     }
 }

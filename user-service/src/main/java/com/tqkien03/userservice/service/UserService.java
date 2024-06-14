@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,6 @@ public class UserService {
         }
         User user = User.builder().id(id).build();
         Profile profile = KeyCloakJwtAuthenticationConverter.getUserProfile();
-
         user.setProfile(profile);
         userRepository.save(user);
         return userMapper.toUserSummary(user, user);
@@ -90,7 +90,9 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(targetId));
 
         target.getFollowers().add(me);
+        target.setFollowersCount(target.getFollowersCount() + 1);
         me.getFollowings().add(target);
+        me.setFollowingsCount(me.getFollowingsCount() + 1);
 
         userRepository.save(me);
         userRepository.save(target);
@@ -106,7 +108,9 @@ public class UserService {
         if (!me.getFollowings().contains(target)) return false;
 
         target.getFollowers().remove(me);
+        target.setFollowersCount(target.getFollowersCount() - 1);
         me.getFollowings().remove(target);
+        me.setFollowingsCount(me.getFollowingsCount() - 1);
 
         userRepository.save(me);
         userRepository.save(target);
@@ -118,7 +122,6 @@ public class UserService {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
         User target = userRepository.findById(targetId)
                 .orElseThrow(() -> new ResourceNotFoundException(targetId));
-
         target.getFriendPendings().add(me);
         me.getFriendRequests().add(target);
 
@@ -135,8 +138,18 @@ public class UserService {
 
         if (!me.getFriendPendings().contains(target) || !target.getFriendRequests().contains(me)) return false;
 
+        target.getFriendRequests().remove(me);
         target.getFriends().add(me);
+        target.getFollowers().add(me);
+        target.setFriendsCount(target.getFriendsCount() + 1);
+        target.setFollowingsCount(target.getFollowingsCount() + 1);
+        target.setFollowersCount(target.getFollowersCount() + 1);
+        me.getFriendPendings().remove(target);
         me.getFriends().add(target);
+        me.getFollowings().add(target);
+        me.setFriendsCount(me.getFriendsCount() + 1);
+        me.setFollowingsCount(me.getFollowingsCount() + 1);
+        me.setFollowersCount(me.getFollowersCount() + 1);
 
         userRepository.save(me);
         userRepository.save(target);
@@ -152,7 +165,13 @@ public class UserService {
         if (!me.getFriends().contains(target) || !target.getFriends().contains(me)) return false;
 
         target.getFriends().remove(me);
+        target.setFriendsCount(target.getFriendsCount() - 1);
+        target.setFollowingsCount(target.getFollowingsCount() - 1);
+        target.setFollowersCount(target.getFollowersCount() - 1);
         me.getFriends().remove(target);
+        me.setFriendsCount(me.getFriendsCount() - 1);
+        me.setFollowingsCount(me.getFollowingsCount() - 1);
+        me.setFollowersCount(me.getFollowersCount() - 1);
 
         userRepository.save(me);
         userRepository.save(target);
@@ -171,5 +190,10 @@ public class UserService {
         User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
         Optional<User> target = userRepository.findById(searchId);
         return target.map(user -> userMapper.toUserSummary(user, me)).orElse(null);
+    }
+
+    public List<UserSummary> getFriendPendings(String myId, int page, int size) {
+        User me = userRepository.findById(myId).orElseThrow(() -> new ResourceNotFoundException(myId));
+        return me.getFriendPendings().stream().map(user -> userMapper.toUserSummary(user, me)).toList();
     }
 }

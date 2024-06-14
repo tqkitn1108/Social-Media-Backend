@@ -14,7 +14,7 @@ public class UserMapper {
     public FollowDto toFollowDto(User user, User me) {
         return FollowDto
                 .builder()
-                .userId(user.getId())
+                .id(user.getId())
                 .fullName(getFullName(user))
                 .avatarUrl(user.getAvatarUrl())
                 .isFollowing(isFollowing(user, me))
@@ -25,7 +25,7 @@ public class UserMapper {
     public FriendDto toFriendDto(User user, User me) {
         return FriendDto
                 .builder()
-                .userId(user.getId())
+                .id(user.getId())
                 .fullName(getFullName(user))
                 .avatarUrl(user.getAvatarUrl())
                 .isFriend(isFriend(user, me))
@@ -71,12 +71,12 @@ public class UserMapper {
     }
 
     boolean isFollower(User user, User me) {
-        if (me == null) return false;
+        if (me == null || me.getFollowers() == null) return false;
         return me.getFollowers().contains(user);
     }
 
     boolean isFollowing(User user, User me) {
-        if (me == null) return false;
+        if (me == null || me.getFollowings() == null) return false;
         return me.getFollowings().contains(user);
     }
 

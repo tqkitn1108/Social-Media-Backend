@@ -48,6 +48,14 @@ public class MediaController {
         return ResponseEntity.ok(mediaService.findMediaById(id));
     }
 
+
+    @GetMapping("/by-owner/{ownerId}")
+    public ResponseEntity<?> findMediasByOwnerId(@PathVariable String ownerId,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "6") int size) {
+        return ResponseEntity.ok(mediaService.findMediasByOwnerId(ownerId, page, size));
+    }
+
     @GetMapping
     public ResponseEntity<?> findMediasByListId(@RequestParam List<Integer> mediaIds) {
         return ResponseEntity.ok(mediaService.findMediasByListId(mediaIds));
