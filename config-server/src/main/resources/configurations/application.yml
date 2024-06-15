@@ -20,3 +20,4 @@ application:
     user-url: http://localhost:8011/api/v1/users
     post-url: http://localhost:8012/api/v1/posts
     media-url: http://localhost:8013/api/v1/medias
+    react-url: http://localhost:8014/api/v1/reacts

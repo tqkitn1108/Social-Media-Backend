@@ -12,6 +12,8 @@ public class UserSummary {
     private boolean isFollowing;
     private boolean isFollower;
     private boolean isFriend;
+    private boolean isPending;
+    private boolean isSendRequest;
     private Integer followersCount;
     private Integer followingsCount;
     private Integer friendsCount;

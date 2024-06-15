@@ -5,8 +5,6 @@ import com.tqkien03.feedservice.dto.FriendDto;
 import com.tqkien03.feedservice.dto.UserDto;
 import com.tqkien03.feedservice.dto.UserSummary;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;

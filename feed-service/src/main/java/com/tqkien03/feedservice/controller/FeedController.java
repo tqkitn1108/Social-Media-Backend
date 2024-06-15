@@ -2,6 +2,7 @@ package com.tqkien03.feedservice.controller;
 
 import com.tqkien03.feedservice.dto.PostDto;
 import com.tqkien03.feedservice.service.FeedService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,10 +19,15 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
     @GetMapping
+    @CircuitBreaker(name = "feed-service", fallbackMethod = "feedFallBack")
     public ResponseEntity<List<PostDto>> getFeed(Authentication authentication,
                                                  @RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "10") int size) {
         List<PostDto> postDtos = feedService.getUserFeed(authentication, page, size);
         return postDtos.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(postDtos);
+    }
+
+    public ResponseEntity<List<PostDto>> feedFallBack(Authentication authentication, int page, int size, Throwable throwable){
+        return null;
     }
 }

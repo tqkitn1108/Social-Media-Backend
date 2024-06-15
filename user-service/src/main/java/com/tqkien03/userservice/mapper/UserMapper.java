@@ -41,12 +41,13 @@ public class UserMapper {
                 .isFollowing(isFollowing(user, me))
                 .isFollower(isFollower(user, me))
                 .isFriend(isFriend(user, me))
+                .isPending(isPending(user, me))
+                .isSendRequest(isSendRequest(user, me))
                 .followingsCount(user.getFollowingsCount())
                 .followersCount(user.getFollowersCount())
                 .friendsCount(user.getFriendsCount())
                 .build();
     }
-
 
     public List<FollowDto> userListToFollowDtoList(List<User> followers, User me) {
         if (me == null) return null;
@@ -71,18 +72,27 @@ public class UserMapper {
     }
 
     boolean isFollower(User user, User me) {
-        if (me == null || me.getFollowers() == null) return false;
+        if (me.getFollowers() == null) return false;
         return me.getFollowers().contains(user);
     }
 
     boolean isFollowing(User user, User me) {
-        if (me == null || me.getFollowings() == null) return false;
+        if (me.getFollowings() == null) return false;
         return me.getFollowings().contains(user);
     }
 
     private boolean isFriend(User user, User me) {
-        if (me == null) return false;
         return me.getFriends().contains(user);
+    }
+
+    private boolean isSendRequest(User user, User me) {
+        if (me.getFriendRequests() == null) return false;
+        return me.getFriendRequests().contains(user);
+    }
+
+    private boolean isPending(User user, User me) {
+        if (me.getFriendPendings() == null) return false;
+        return me.getFriendPendings().contains(user);
     }
 
 }

@@ -47,7 +47,6 @@ public class CommentMapper {
     }
 
     public UserSummary getUserSummary(Comment comment, String myId) {
-        return userFeignClient.getUserSummary(comment.getUserId(), myId)
-                .orElseThrow(() -> new ResourceNotFoundException("User" + myId + "not found"));
+        return userFeignClient.getUserSummary(comment.getUserId(), myId);
     }
 }

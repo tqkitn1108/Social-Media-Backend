@@ -37,8 +37,7 @@ public class PostMapper {
     }
 
     public UserSummary getUserSummary(Post post, String myId) {
-            return userFeignClient.getUserSummary(post.getOwnerId(), myId)
-                .orElseThrow(() -> new ResourceNotFoundException(post.getOwnerId()));
+            return userFeignClient.getUserSummary(post.getOwnerId(), myId);
     }
 
     private boolean checkReact(Integer postId, String myId) {

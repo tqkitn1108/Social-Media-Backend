@@ -32,17 +32,20 @@ public class FeedGeneratorService {
         List<FriendDto> friends = userFeignClient.getFriends(userId, page, size);
 
         Feed myFeed = feedRepository.findByUserId(userId);
-        post.getFeeds().add(myFeed);
+        if(myFeed == null) myFeed = Feed.builder().userId(userId).build();
+        post.getFeeds().add(feedRepository.save(myFeed));
         if(followers != null && !followers.isEmpty()){
             followers.forEach(follower -> {
                 Feed followerFeed = feedRepository.findByUserId(follower.getId());
-                post.getFeeds().add(followerFeed);
+                if(followerFeed == null) followerFeed = Feed.builder().userId(follower.getId()).build();
+                post.getFeeds().add(feedRepository.save(followerFeed));
             });
         }
         if(friends != null && !friends.isEmpty()){
             friends.forEach(friend -> {
                 Feed friendFeed = feedRepository.findByUserId(friend.getId());
-                post.getFeeds().add(friendFeed);
+                if(friendFeed == null) friendFeed = Feed.builder().userId(friend.getId()).build();
+                post.getFeeds().add(feedRepository.save(friendFeed));
             });
         }
         postRepository.save(post);
@@ -52,9 +55,9 @@ public class FeedGeneratorService {
         int postId = postEventInfo.getPostId();
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(postId)));
-        Set<Feed> feeds = post.getFeeds();
-        List<Feed> updatedFeeds = feeds.stream().peek(feed -> feed.getPosts().remove(post)).toList();
+//        Set<Feed> feeds = post.getFeeds();
+//        List<Feed> updatedFeeds = feeds.stream().peek(feed -> feed.getPosts().remove(post)).toList();
         postRepository.delete(post);
-        updatedFeeds.forEach(feedRepository::save);
+//        updatedFeeds.forEach(feedRepository::save);
     }
 }

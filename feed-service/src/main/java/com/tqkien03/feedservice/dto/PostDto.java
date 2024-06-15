@@ -10,9 +10,9 @@ import java.util.List;
 @Builder
 public class PostDto {
     private Integer id;
-    private String ownerId;
     private String content;
-    private List<MediaDto> mediaDtos;
+    private boolean reacted;
+    private List<MediaDto> medias;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private int reactsCount;

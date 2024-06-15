@@ -26,6 +26,37 @@ spring:
         spring.json.trusted.packages: '*'
         spring.json.type.mapping: reactEventInfo:com.tqkien03.postservice.messaging.ReactEventInfo,commentEventInfo:com.tqkien03.postservice.messaging.CommentEventInfo
 
-application:
-  config:
-    react-url: http://localhost:8014/api/v1/reacts
+#management:
+#  health:
+#    circuitbreakers:
+#      enabled: true
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health
+#  endpoint:
+#    health:
+#      show-details: always
+
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      default:
+#        registerHealthIndicator: true
+#        event-consumer-buffer-size: 10
+#        slidingWindowType: COUNT_BASED
+#        slidingWindowSize: 5
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 3s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#        minimum-number-of-calls: 5
+#  timelimiter:
+#    instances:
+#      default:
+#        timeout-duration: 3s
+#  retry:
+#    instances:
+#      default:
+#        max-attempts: 3
+#        wait-duration: 5s

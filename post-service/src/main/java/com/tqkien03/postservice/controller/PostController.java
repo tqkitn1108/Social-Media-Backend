@@ -3,7 +3,6 @@ package com.tqkien03.postservice.controller;
 import com.tqkien03.postservice.dto.PostDto;
 import com.tqkien03.postservice.dto.PostRequest;
 import com.tqkien03.postservice.service.PostService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
